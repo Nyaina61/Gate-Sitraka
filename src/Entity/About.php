@@ -145,7 +145,7 @@ class About
             if ($experience->getAbout() === $this) {
                 $experience->setAbout(null);
             }
-        }
+        } 
 
         return $this;
     }
