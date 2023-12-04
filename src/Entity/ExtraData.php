@@ -20,6 +20,9 @@ class ExtraData
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $Content = null;
 
+    #[ORM\ManyToOne(inversedBy: 'extraData')]
+    private ?Pays $country = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -45,6 +48,18 @@ class ExtraData
     public function setContent(?string $Content): static
     {
         $this->Content = $Content;
+
+        return $this;
+    }
+
+    public function getCountry(): ?Pays
+    {
+        return $this->country;
+    }
+
+    public function setCountry(?Pays $country): static
+    {
+        $this->country = $country;
 
         return $this;
     }

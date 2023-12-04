@@ -109,8 +109,9 @@ class Pays
     #[Groups(['aside_read', 'pays_read'])]
     private Collection $cities;
 
-    #[ORM\OneToMany(mappedBy: 'pays', targetEntity: PaysPost::class)]
-    private Collection $paysPosts;
+    #[ORM\OneToMany(mappedBy: 'country', targetEntity: ExtraData::class)]
+    private Collection $extraData;
+
 
 
     public function __construct()
@@ -118,8 +119,7 @@ class Pays
         $this->religions = new ArrayCollection();
         $this->languages = new ArrayCollection();
         $this->companies = new ArrayCollection();
-        $this->cities = new ArrayCollection();
-        $this->paysPosts = new ArrayCollection();
+        $this->extraData = new ArrayCollection();
     } 
 
     public function getId(): ?string
@@ -374,34 +374,35 @@ class Pays
     }
 
     /**
-     * @return Collection<int, PaysPost>
+     * @return Collection<int, ExtraData>
      */
-    public function getPaysPosts(): Collection
+    public function getExtraData(): Collection
     {
-        return $this->paysPosts;
+        return $this->extraData;
     }
 
-    public function addPaysPost(PaysPost $paysPost): static
+    public function addExtraData(ExtraData $extraData): static
     {
-        if (!$this->paysPosts->contains($paysPost)) {
-            $this->paysPosts->add($paysPost);
-            $paysPost->setPays($this);
+        if (!$this->extraData->contains($extraData)) {
+            $this->extraData->add($extraData);
+            $extraData->setCountry($this);
         }
 
         return $this;
     }
 
-    public function removePaysPost(PaysPost $paysPost): static
+    public function removeExtraData(ExtraData $extraData): static
     {
-        if ($this->paysPosts->removeElement($paysPost)) {
+        if ($this->extraData->removeElement($extraData)) {
             // set the owning side to null (unless already changed)
-            if ($paysPost->getPays() === $this) {
-                $paysPost->setPays(null);
+            if ($extraData->getCountry() === $this) {
+                $extraData->setCountry(null);
             }
         }
 
         return $this;
     }
+
 
 }
 
