@@ -1,0 +1,10 @@
+gesdinet_jwt_refresh_token:
+    refresh_token_class: App\Entity\RefreshToken
+    cookie:
+      enabled: true
+      same_site: none
+      path: /     
+      domain: '%env(COOKIE_DOMAIN)%'
+      http_only: false
+      secure: true
+      remove_token_from_body: true

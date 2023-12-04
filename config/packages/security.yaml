@@ -1,0 +1,61 @@
+security:
+    # https://symfony.com/doc/current/security.html#registering-the-user-hashing-passwords
+    password_hashers:
+        Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface: 'auto'
+    # https://symfony.com/doc/current/security.html#loading-the-user-the-user-provider
+    enable_authenticator_manager: true
+    providers:
+        # used to reload user from session & other features (e.g. switch_user)
+        app_user_provider:
+            entity:
+                class: App\Entity\User
+                property: email
+    firewalls:
+        
+            
+        #     json_login:
+        #         check_path: /api/login_check
+        #         success_handler: lexik_jwt_authentication.handler.authentication_success
+        #         failure_handler: lexik_jwt_authentication.handler.authentication_failure
+        #         username_path: email
+        #         password_path: password
+        login:
+            pattern: '^/api/login'
+            stateless: true
+            json_login:
+                check_path: /api/login_check
+                success_handler: lexik_jwt_authentication.handler.authentication_success
+                failure_handler: lexik_jwt_authentication.handler.authentication_failure
+                username_path: email
+                password_path: password
+        # google_login:
+        #     pattern: ^/connect/google
+        #     custom_authenticators:
+        #         - App\Security\GoogleAuthenticator
+        api:
+            pattern:   ^/api
+            stateless: true
+            jwt: ~
+
+    access_control:
+        - { path: ^/api/login_check, roles: PUBLIC_ACCESS }
+        - { path: ^/api/users,       roles: PUBLIC_ACCESS, methods: [POST,GET] }
+        - { path: ^/api/companies,       roles: ROLE_USER, methods: [POST,PUT,DELETE,PATCH] }
+        - { path: ^/api/evaluations,       roles: ROLE_USER, methods: [POST,PUT,DELETE,PATCH] }
+        - { path: '^/api/discussions/{id}/messages', roles: 'ROLE_USER' }
+        - { path: ^/api/discussions,       roles: ROLE_USER}
+        - { path: ^/api/messages,       roles: ROLE_USER}
+        # - { path: ^/api/posts,       roles: IS_AUTHENTICATED_FULLY }
+
+when@test:
+    security:
+        password_hashers:
+            # By default, password hashers are resource intensive and take time. This is
+            # important to generate secure password hashes. In tests however, secure hashes
+            # are not important, waste resources and increase test times. The following
+            # reduces the work factor to the lowest possible values.
+            Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface:
+                algorithm: auto
+                cost: 4 # Lowest possible value for bcrypt
+                time_cost: 3 # Lowest possible value for argon
+                memory_cost: 10 # Lowest possible value for argon

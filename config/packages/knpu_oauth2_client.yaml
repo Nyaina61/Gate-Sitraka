@@ -1,0 +1,29 @@
+knpu_oauth2_client:
+    clients:
+        google:
+            type: google
+            client_id: '%env(resolve:GOOGLE_CLIENT_ID)%'
+            client_secret: '%env(resolve:GOOGLE_CLIENT_SECRET)%'
+            redirect_route: connect_social_check
+            redirect_params: {
+                provider: google
+            }
+        facebook:
+            type: facebook
+            client_id: '%env(resolve:FB_CLIENT_ID)%'
+            client_secret: '%env(resolve:FB_CLIENT_SECRET)%'
+            redirect_route: connect_social_check
+            graph_api_version: 'v2.10'
+            redirect_params: {
+                provider: facebook
+            }
+        linkedin:
+            type: linkedin
+            client_id: '%env(LINKEDIN_CLIENT_ID)%'
+            client_secret: '%env(LINKEDIN_CLIENT_SECRET)%'
+            redirect_route: connect_social_check
+            redirect_params: {
+                provider: linkedin
+            }
+
+        # configure your clients as described here: https://github.com/knpuniversity/oauth2-client-bundle#configuration
