@@ -109,6 +109,9 @@ class Pays
     #[Groups(['aside_read', 'pays_read'])]
     private Collection $cities;
 
+    #[ORM\OneToMany(mappedBy: 'pays', targetEntity: PaysPost::class)]
+    private Collection $paysPosts;
+
 
     public function __construct()
     {
@@ -116,6 +119,7 @@ class Pays
         $this->languages = new ArrayCollection();
         $this->companies = new ArrayCollection();
         $this->cities = new ArrayCollection();
+        $this->paysPosts = new ArrayCollection();
     } 
 
     public function getId(): ?string
@@ -363,6 +367,36 @@ class Pays
             // set the owning side to null (unless already changed)
             if ($company->getCountry() === $this) {
                 $company->setCountry(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, PaysPost>
+     */
+    public function getPaysPosts(): Collection
+    {
+        return $this->paysPosts;
+    }
+
+    public function addPaysPost(PaysPost $paysPost): static
+    {
+        if (!$this->paysPosts->contains($paysPost)) {
+            $this->paysPosts->add($paysPost);
+            $paysPost->setPays($this);
+        }
+
+        return $this;
+    }
+
+    public function removePaysPost(PaysPost $paysPost): static
+    {
+        if ($this->paysPosts->removeElement($paysPost)) {
+            // set the owning side to null (unless already changed)
+            if ($paysPost->getPays() === $this) {
+                $paysPost->setPays(null);
             }
         }
 

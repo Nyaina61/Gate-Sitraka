@@ -35,7 +35,9 @@ class AppFixtures extends Fixture
             'Algérie' => [
                 'flag' => 'algeria.svg',
                 'cities' => ['Alger', 'Oran', 'Constantine', 'Annaba'],
-                'languages' => ['Arabe', 'Berbère', 'Français']
+                'photos' => ['photo1.jpg', 'photo2.jpg', 'photo3.jpg'],
+                'languages' => ['Arabe', 'Berbère', 'Français'],
+
             ],
             'Angola' => [
                 'flag' => 'angola.svg',

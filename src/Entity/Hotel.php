@@ -2,75 +2,48 @@
 
 namespace App\Entity;
 
+use App\Filter\HotelFilter;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Metadata\ApiFilter;
 use App\Repository\HotelRepository;
 use ApiPlatform\Metadata\ApiResource;
-use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
-use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: HotelRepository::class)]
-#[ApiResource( 
-    normalizationContext:['groups'=>['hotel']]
-)]
-#[ApiFilter(SearchFilter::class, properties: ['type'=>'partial',
-    'location'=>'exact',
-    'stars'=>'exact',
-    'openingTime'=>'exact',
-    'name'=>'exact',
-
-])]
-
+#[ApiResource()]
+#[ApiFilter(HotelFilter::class)]
 class Hotel
 {
     #[ORM\Id]
-    #[ORM\Column(type: "string", unique: true)]
-    #[ORM\GeneratedValue(strategy: 'CUSTOM')]
-    #[ORM\CustomIdGenerator(class: 'App\Doctrine\Base58UuidGenerator')]
-    private ?string $id = null;
+    #[ORM\GeneratedValue]
+    #[ORM\Column]
+    private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['hotel'])]
-    private ?string $type = null;
-
-    #[ORM\Column(length: 255)]
-    #[Groups(['hotel'])]
-    private ?string $location = null;
-
-    #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(['hotel'])]
-    private ?string $stars = null;
-
-    #[ORM\Column(length: 255)]
-    #[Groups(['hotel'])]
-    private ?string $nifStat = null;
-
-    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    #[Groups(['hotel'])]
-    private ?\DateTimeInterface $openingTime = null;
-
-    #[ORM\ManyToOne(inversedBy: 'hotels')]
-    #[Groups(['hotel'])]
-    private ?Author $author = null;
-
-    #[ORM\Column(length: 255)]
-    #[Groups(['hotel'])]
     private ?string $name = null;
 
-    public function getId(): ?string
+    #[ORM\Column(length: 255)]
+    private ?string $location = null;
+
+    #[ORM\Column]
+    private ?int $numberOfRoom = null;
+
+    #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 6)]
+    private ?string $price = null;
+
+    public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getType(): ?string
+    public function getName(): ?string
     {
-        return $this->type;
+        return $this->name;
     }
 
-    public function setType(string $type): static
+    public function setName(string $name): static
     {
-        $this->type = $type;
+        $this->name = $name;
 
         return $this;
     }
@@ -87,70 +60,26 @@ class Hotel
         return $this;
     }
 
-    public function getStars(): ?string
+    public function getNumberOfRoom(): ?int
     {
-        return $this->stars;
+        return $this->numberOfRoom;
     }
 
-    public function setStars(?string $stars): static
+    public function setNumberOfRoom(int $numberOfRoom): static
     {
-        $this->stars = $stars;
+        $this->numberOfRoom = $numberOfRoom;
 
         return $this;
     }
 
-    public function getNifStat(): ?string
+    public function getPrice(): ?string
     {
-        return $this->nifStat;
+        return $this->price;
     }
 
-    public function setNifStat(string $nifStat): static
+    public function setPrice(string $price): static
     {
-        $this->nifStat = $nifStat;
-
-        return $this;
-    }
-
-    public function getAuthor(): ?Author
-    {
-        return $this->author;
-    }
-
-    public function setAuthor(?Author $author): static
-    {
-        $this->author = $author;
-
-        return $this;
-    }
-
-    public function getName(): ?string
-    {
-        return $this->name;
-    }
-
-    public function setName(string $name): static
-    {
-        $this->name = $name;
-
-        return $this;
-    }
-
-    /**
-     * Get the value of openingTime
-     */ 
-    public function getOpeningTime()
-    {
-        return $this->openingTime;
-    }
-
-    /**
-     * Set the value of openingTime
-     *
-     * @return  self
-     */ 
-    public function setOpeningTime($openingTime)
-    {
-        $this->openingTime = $openingTime;
+        $this->price = $price;
 
         return $this;
     }

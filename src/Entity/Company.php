@@ -4,7 +4,6 @@ namespace App\Entity;
 
 use App\Entity\Author;
 use App\Entity\Domain;
-use App\Entity\Evaluation;
 use App\Entity\CompanyLogo;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\Put;
@@ -17,8 +16,6 @@ use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiResource;
 use App\Repository\CompanyRepository;
 use ApiPlatform\Metadata\GetCollection;
-use App\Controller\CompanyGetController;
-use App\Filter\InvestCustomsSearchFilter;
 use App\Controller\CreateCompanyController;
 use Doctrine\Common\Collections\Collection;
 use ApiPlatform\Metadata\Post as MetadataPost;

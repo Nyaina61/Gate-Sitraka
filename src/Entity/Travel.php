@@ -3,7 +3,6 @@
 namespace App\Entity;
 
 use App\Repository\TravelRepository;
-use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: TravelRepository::class)]
@@ -11,14 +10,14 @@ class Travel
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column]
+    #[ORM\Column]   
     private ?int $id = null;
 
-    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    private ?\DateTimeInterface $arrival = null;
+    #[ORM\Column(length: 255)]
+    private ?string $arrival = null;
 
-    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
-    private ?\DateTimeInterface $departure = null;
+    #[ORM\Column(length: 255)]
+    private ?string $departure = null;
 
     #[ORM\Column]
     private ?int $numberOfPeople = null;
@@ -26,29 +25,30 @@ class Travel
     #[ORM\Column]
     private ?int $numberOfRoom = null;
 
+   
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getArrival(): ?\DateTimeInterface
+    public function getArrival(): ?string
     {
         return $this->arrival;
     }
 
-    public function setArrival(\DateTimeInterface $arrival): static
+    public function setArrival(string $arrival): static
     {
         $this->arrival = $arrival;
 
         return $this;
     }
 
-    public function getDeparture(): ?\DateTimeInterface
+    public function getDeparture(): ?string
     {
         return $this->departure;
     }
 
-    public function setDeparture(?\DateTimeInterface $departure): static
+    public function setDeparture(string $departure): static
     {
         $this->departure = $departure;
 
@@ -78,4 +78,5 @@ class Travel
 
         return $this;
     }
+
 }

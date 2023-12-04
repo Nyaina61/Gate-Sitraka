@@ -14,6 +14,7 @@ use App\Entity\PaysEconomy;
 use App\Entity\PaysGeography;
 use App\Entity\PaysGouvernment;
 use App\Entity\PaysHistory;
+use App\Entity\PaysPost;
 use App\Entity\Religion;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -68,41 +69,41 @@ class PayPostController extends AbstractController
           $pays->setSeal($seal);
         }
 
-         // Créer une nouvelle instance de Histoire et définir les valeurs
-         $history = new PaysHistory();
-         $historyData = json_decode($paysData['paysHistory'], true);
-         $history->setExtraData($historyData);
-         $pays->setPaysHistory($history);
+        //  // Créer une nouvelle instance de Histoire et définir les valeurs
+        //  $history = new PaysHistory();
+        //  $historyData = json_decode($paysData['paysHistory'], true);
+        //  $history->setExtraData($historyData);
+        //  $pays->setPaysHistory($history);
  
-         // Créer une nouvelle instance de Geographie et définir les valeurs
-         $geography = new PaysGeography();
-         $geographyData = json_decode($paysData['paysGeography'], true);
-         $geography->setExtraData($geographyData);
-         $pays->setPaysGeography($geography);
+        //  // Créer une nouvelle instance de Geographie et définir les valeurs
+        //  $geography = new PaysGeography();
+        //  $geographyData = json_decode($paysData['paysGeography'], true);
+        //  $geography->setExtraData($geographyData);
+        //  $pays->setPaysGeography($geography);
 
-          // Créer une nouvelle instance de Demographie et définir les valeurs
-        $demog = new PaysDemog();
-        $demogData = json_decode($paysData['paysDemog'], true);
-        $demog->setExtraData($demogData);
-        $pays->setPaysDemog($demog);
+        //   // Créer une nouvelle instance de Demographie et définir les valeurs
+        // $demog = new PaysDemog();
+        // $demogData = json_decode($paysData['paysDemog'], true);
+        // $demog->setExtraData($demogData);
+        // $pays->setPaysDemog($demog);
 
-        // Créer une nouvelle instance de Cultures et définir les valeurs
-        $cultures = new PaysCultures();
-        $culturesData = json_decode($paysData['paysCultures'], true);
-        $cultures->setExtraData($culturesData);
-        $pays->setPaysCultures($cultures);
+        // // Créer une nouvelle instance de Cultures et définir les valeurs
+        // $cultures = new PaysCultures();
+        // $culturesData = json_decode($paysData['paysCultures'], true);
+        // $cultures->setExtraData($culturesData);
+        // $pays->setPaysCultures($cultures);
 
-         // Créer une nouvelle instance de Economy et définir les valeurs
-         $economy = new PaysEconomy();
-         $economyData = json_decode($paysData['paysEconomy'], true);
-         $economy->setExtraData($economyData);
-         $pays->setPaysEconomy($economy);
+        //  // Créer une nouvelle instance de Economy et définir les valeurs
+        //  $economy = new PaysEconomy();
+        //  $economyData = json_decode($paysData['paysEconomy'], true);
+        //  $economy->setExtraData($economyData);
+        //  $pays->setPaysEconomy($economy);
  
-         // Créer une nouvelle instance de Gouvernment et définir les valeurs
-         $gouvernment = new PaysGouvernment();
-         $gouvernmentData = json_decode($paysData['paysGouvernment'], true);
-         $gouvernment->setExtraData($gouvernmentData);
-         $pays->setPaysGouvernment($gouvernment);
+        //  // Créer une nouvelle instance de Gouvernment et définir les valeurs
+        //  $gouvernment = new PaysGouvernment();
+        //  $gouvernmentData = json_decode($paysData['paysGouvernment'], true);
+        //  $gouvernment->setExtraData($gouvernmentData);
+        //  $pays->setPaysGouvernment($gouvernment);
 
         // Créer une nouvelle instance de Location et définir les valeurs de longitude et latitude
 
@@ -134,19 +135,21 @@ class PayPostController extends AbstractController
 
         // Associer l'instance de Location à l'instance de Pays
 
+        // $entityManager->persist($history);
+        // $entityManager->persist($geography);
+        // $entityManager->persist($economy);
+        // $entityManager->persist($demog);
+        // $entityManager->persist($cultures);
+        // $entityManager->persist($gouvernment);
+
         $entityManager->persist($aside);
         $entityManager->persist($location);
         $entityManager->persist($religion);
-        $entityManager->persist($history);
-        $entityManager->persist($geography);
-        $entityManager->persist($economy);
         $entityManager->persist($language);
-        $entityManager->persist($demog);
-        $entityManager->persist($cultures);
-        $entityManager->persist($gouvernment);
         $entityManager->persist($pays);
         $entityManager->flush();
 
         return $pays;
+        
     }
 }
