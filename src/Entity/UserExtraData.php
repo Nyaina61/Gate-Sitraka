@@ -2,26 +2,34 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Metadata\Get;
 use Doctrine\DBAL\Types\Types;
+use ApiPlatform\Metadata\Patch;
 use Doctrine\ORM\Mapping as ORM;
+use App\Controller\AboutController;
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Delete;
 use App\Repository\UserExtraDataRepository;
-
-
+use ApiPlatform\Metadata\Post as MetadataPost;
+use ApiPlatform\Metadata\Put;
 
 #[ORM\Entity(repositoryClass: UserExtraDataRepository::class)]
 #[ApiResource(
-    collectionOperations: [
-        'get',
-        'post' => [
-            'controller' => 'App\Controller\AboutController::createUserExtraData',
-        ],
+    operations: [
+        new Get(),
+        new MetadataPost(
+            controller: AboutController::class
+        ),
     ],
-    itemOperations: [
-        'get',
-        'put',
-        'delete',
-    ],
+ )]
+ #[ApiResource(
+    operations: [
+        new Get(),
+        new MetadataPost(),
+        new Patch(),
+        new Put(),
+        new Delete()
+    ]
  )]
 class UserExtraData
 {
