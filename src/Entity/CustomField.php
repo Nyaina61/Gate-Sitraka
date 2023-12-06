@@ -4,13 +4,14 @@ namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
 use App\Repository\CustomFieldRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: CustomFieldRepository::class)]
 #[ApiResource()]
 class CustomField
-
 {
     #[ORM\Id]
     #[ORM\Column(type: "string", unique: true)]
@@ -33,7 +34,20 @@ class CustomField
     #[ORM\Column(length: 255)]
     private ?string $entityId = null;
 
+    #[ORM\OneToMany(mappedBy: 'customField', targetEntity: ExtraData::class)]
+    private Collection $extraData;
+
+    public function __construct()
+    {
+        $this->extraData = new ArrayCollection();
+    }
+
     public function getId(): ?string
+    {
+        return $this->id;
+    }
+
+    public function setId(): ?string
     {
         return $this->id;
     }
@@ -96,6 +110,36 @@ class CustomField
     public function setEntityId(string $entityId): static
     {
         $this->entityId = $entityId;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, ExtraData>
+     */
+    public function getExtraData(): Collection
+    {
+        return $this->extraData;
+    }
+
+    public function addExtraData(ExtraData $extraData): static
+    {
+        if (!$this->extraData->contains($extraData)) {
+            $this->extraData->add($extraData);
+            $extraData->setCustomField($this);
+        }
+
+        return $this;
+    }
+
+    public function removeExtraData(ExtraData $extraData): static
+    {
+        if ($this->extraData->removeElement($extraData)) {
+            // set the owning side to null (unless already changed)
+            if ($extraData->getCustomField() === $this) {
+                $extraData->setCustomField(null);
+            }
+        }
 
         return $this;
     }

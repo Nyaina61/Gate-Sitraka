@@ -23,14 +23,14 @@ use ApiPlatform\Metadata\Put;
     ],
  )]
  #[ApiResource(
-    operations: [
-        new Get(),
-        new MetadataPost(),
-        new Patch(),
-        new Put(),
-        new Delete()
-    ]
- )]
+             operations: [
+                 new Get(),
+                 new MetadataPost(),
+                 new Patch(),
+                 new Put(),
+                 new Delete()
+             ]
+          )]
 class UserExtraData
 {
     #[ORM\Id]
@@ -46,6 +46,10 @@ class UserExtraData
 
     #[ORM\ManyToOne(inversedBy: 'userExtraData')]
     private ?About $about = null;
+
+    #[ORM\ManyToOne(inversedBy: 'userExtraData')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Author $postedBy = null;
 
     public function getId(): ?int
     {
@@ -84,6 +88,18 @@ class UserExtraData
     public function setAbout(?About $about): static
     {
         $this->about = $about;
+
+        return $this;
+    }
+
+    public function getPostedBy(): ?Author
+    {
+        return $this->postedBy;
+    }
+
+    public function setPostedBy(?Author $postedBy): static
+    {
+        $this->postedBy = $postedBy;
 
         return $this;
     }

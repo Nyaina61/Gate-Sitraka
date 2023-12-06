@@ -23,6 +23,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 
 
 #[ORM\Entity(repositoryClass: PaysRepository::class)]
+#[ApiResource()]
 #[ApiResource(
     operations: [
         new Get(),
@@ -41,14 +42,13 @@ use Symfony\Component\Serializer\Annotation\Groups;
 "religion.religion" => "partial",
 "aside.internetTld" => "exact",
 "aside.anthem" => "partial"])]
-class Pays
+class Pays extends CustomField
 {
-    #[ORM\Id]
-    #[ORM\Column(type: "string", unique: true)]
-    #[ORM\GeneratedValue(strategy: 'CUSTOM')]
-    #[ORM\CustomIdGenerator(class: 'App\Doctrine\Base58UuidGenerator')]
-    #[Groups(['aside_read', 'pays_read','country_list','company_read', 'invest_read', 'posts_read'])]
-    private ?string $id = null;
+    // #[ORM\Id]
+    // #[ORM\Column(type: "string", unique: true)]
+    // #[ORM\GeneratedValue(strategy: 'CUSTOM')]
+    // #[ORM\CustomIdGenerator(class: 'App\Doctrine\Base58UuidGenerator')]
+    // public ?string $id = null;
 
     #[ORM\Column(length: 255)]
     #[Groups(['aside_read', 'pays_read','country_list','company_read', 'invest_read', 'posts_read','cities_read'])]
@@ -109,17 +109,12 @@ class Pays
     #[Groups(['aside_read', 'pays_read'])]
     private Collection $cities;
 
-    #[ORM\OneToMany(mappedBy: 'country', targetEntity: ExtraData::class)]
-    private Collection $extraData;
-
-
 
     public function __construct()
     {
         $this->religions = new ArrayCollection();
         $this->languages = new ArrayCollection();
         $this->companies = new ArrayCollection();
-        $this->extraData = new ArrayCollection();
     } 
 
     public function getId(): ?string
@@ -372,37 +367,6 @@ class Pays
 
         return $this;
     }
-
-    /**
-     * @return Collection<int, ExtraData>
-     */
-    public function getExtraData(): Collection
-    {
-        return $this->extraData;
-    }
-
-    public function addExtraData(ExtraData $extraData): static
-    {
-        if (!$this->extraData->contains($extraData)) {
-            $this->extraData->add($extraData);
-            $extraData->setCountry($this);
-        }
-
-        return $this;
-    }
-
-    public function removeExtraData(ExtraData $extraData): static
-    {
-        if ($this->extraData->removeElement($extraData)) {
-            // set the owning side to null (unless already changed)
-            if ($extraData->getCountry() === $this) {
-                $extraData->setCountry(null);
-            }
-        }
-
-        return $this;
-    }
-
 
 }
 

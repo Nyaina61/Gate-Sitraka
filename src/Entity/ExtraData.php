@@ -2,11 +2,13 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Metadata\ApiResource;
 use App\Repository\ExtraDataRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: ExtraDataRepository::class)]
+#[ApiResource()]
 class ExtraData
 {
     #[ORM\Id]
@@ -22,6 +24,12 @@ class ExtraData
 
     #[ORM\ManyToOne(inversedBy: 'extraData')]
     private ?Pays $country = null;
+
+    #[ORM\ManyToOne(inversedBy: 'extraData')]
+    private ?CustomField $customField = null;
+
+    #[ORM\ManyToOne(inversedBy: 'extraData')]
+    private ?Pays $pays = null;
 
     public function getId(): ?int
     {
@@ -60,6 +68,30 @@ class ExtraData
     public function setCountry(?Pays $country): static
     {
         $this->country = $country;
+
+        return $this;
+    }
+
+    public function getCustomField(): ?CustomField
+    {
+        return $this->customField;
+    }
+
+    public function setCustomField(?CustomField $customField): static
+    {
+        $this->customField = $customField;
+
+        return $this;
+    }
+
+    public function getPays(): ?Pays
+    {
+        return $this->pays;
+    }
+
+    public function setPays(?Pays $pays): static
+    {
+        $this->pays = $pays;
 
         return $this;
     }

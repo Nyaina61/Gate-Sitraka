@@ -12,6 +12,9 @@ use ApiPlatform\Metadata\ApiResource;
 #[ApiResource(
     normalizationContext:[
         'groups' => ['users_read', 'about_read']
+    ],
+    operations:[
+        
     ]
 )]
 class About
