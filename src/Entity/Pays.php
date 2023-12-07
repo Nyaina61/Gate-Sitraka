@@ -42,13 +42,13 @@ use Symfony\Component\Serializer\Annotation\Groups;
 "religion.religion" => "partial",
 "aside.internetTld" => "exact",
 "aside.anthem" => "partial"])]
-class Pays extends CustomField
+class Pays
 {
-    // #[ORM\Id]
-    // #[ORM\Column(type: "string", unique: true)]
-    // #[ORM\GeneratedValue(strategy: 'CUSTOM')]
-    // #[ORM\CustomIdGenerator(class: 'App\Doctrine\Base58UuidGenerator')]
-    // public ?string $id = null;
+    #[ORM\Id]
+    #[ORM\Column(type: "string", unique: true)]
+    #[ORM\GeneratedValue(strategy: 'CUSTOM')]
+    #[ORM\CustomIdGenerator(class: 'App\Doctrine\Base58UuidGenerator')]
+    public ?string $id = null;
 
     #[ORM\Column(length: 255)]
     #[Groups(['aside_read', 'pays_read','country_list','company_read', 'invest_read', 'posts_read','cities_read'])]
@@ -109,12 +109,16 @@ class Pays extends CustomField
     #[Groups(['aside_read', 'pays_read'])]
     private Collection $cities;
 
+    #[ORM\OneToMany(mappedBy: 'countries', targetEntity: CustomField::class)]
+    private Collection $customFields;
+
 
     public function __construct()
     {
         $this->religions = new ArrayCollection();
         $this->languages = new ArrayCollection();
         $this->companies = new ArrayCollection();
+        $this->customFields = new ArrayCollection();
     } 
 
     public function getId(): ?string
@@ -362,6 +366,36 @@ class Pays extends CustomField
             // set the owning side to null (unless already changed)
             if ($company->getCountry() === $this) {
                 $company->setCountry(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, CustomField>
+     */
+    public function getCustomFields(): Collection
+    {
+        return $this->customFields;
+    }
+
+    public function addCustomField(CustomField $customField): static
+    {
+        if (!$this->customFields->contains($customField)) {
+            $this->customFields->add($customField);
+            $customField->setCountries($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCustomField(CustomField $customField): static
+    {
+        if ($this->customFields->removeElement($customField)) {
+            // set the owning side to null (unless already changed)
+            if ($customField->getCountries() === $this) {
+                $customField->setCountries(null);
             }
         }
 

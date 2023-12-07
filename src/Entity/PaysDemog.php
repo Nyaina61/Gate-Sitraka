@@ -24,34 +24,21 @@ class PaysDemog
     #[ORM\CustomIdGenerator(class: 'App\Doctrine\Base58UuidGenerator')]
     private ?string $id = null;
 
-    #[Column(type: 'json')]
-    #[Groups(['pays_read'])]
-    private array $extraData = [];
-
     #[ORM\OneToMany(mappedBy: 'paysDemog', targetEntity: Pays::class)]
     private Collection $pays;
+
+    #[ORM\OneToMany(mappedBy: 'paysDemog', targetEntity: CustomField::class)]
+    private Collection $customFields;
 
     public function __construct()
     {
         $this->pays = new ArrayCollection();
+        $this->customFields = new ArrayCollection();
     }
 
     public function getId(): ?string
     {
         return $this->id;
-    }
-
-    //Extra data users
-    public function getExtraData(): array
-    {
-        return $this->extraData;
-    }
-
-    public function setExtraData(array $extraData): self
-    {
-        $this->extraData = $extraData;
-
-        return $this;
     }
 
     /**
@@ -78,6 +65,36 @@ class PaysDemog
             // set the owning side to null (unless already changed)
             if ($pay->getPaysDemog() === $this) {
                 $pay->setPaysDemog(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, CustomField>
+     */
+    public function getCustomFields(): Collection
+    {
+        return $this->customFields;
+    }
+
+    public function addCustomField(CustomField $customField): static
+    {
+        if (!$this->customFields->contains($customField)) {
+            $this->customFields->add($customField);
+            $customField->setPaysDemog($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCustomField(CustomField $customField): static
+    {
+        if ($this->customFields->removeElement($customField)) {
+            // set the owning side to null (unless already changed)
+            if ($customField->getPaysDemog() === $this) {
+                $customField->setPaysDemog(null);
             }
         }
 
