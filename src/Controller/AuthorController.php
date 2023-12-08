@@ -3,9 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Author;
-use App\Entity\User;
-use App\Entity\Category;
-use App\Entity\ExtraData;
+use App\Entity\UserExtraData;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\Request;
@@ -36,12 +34,12 @@ class AuthorController extends AbstractController
      $data = json_decode($request->getContent(), true);
 
      // Créer une nouvelle instance de Category
-     $extraData = new ExtraData();
-     $extraData->setTitle($data['title']);
-     $extraData->setContent($data['content']);
+     $userExtraData = new UserExtraData();
+     $userExtraData->setTitle($data['title']);
+     $userExtraData->setContent($data['content']);
 
      // Associer la catégorie à l'utilisateur
-     $author->addExtraData($extraData);
+     $author->addExtraData($userExtraData);
 
      // Persister l'utilisateur et la nouvelle catégorie
      $entityManager->persist($author);

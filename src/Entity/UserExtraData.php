@@ -3,34 +3,34 @@
 namespace App\Entity;
 
 use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\Put;
 use Doctrine\DBAL\Types\Types;
 use ApiPlatform\Metadata\Patch;
-use Doctrine\ORM\Mapping as ORM;
-use App\Controller\AboutController;
-use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Delete;
+use Doctrine\ORM\Mapping as ORM;
+use App\Controller\AuthorController;
+use ApiPlatform\Metadata\ApiResource;
 use App\Repository\UserExtraDataRepository;
 use ApiPlatform\Metadata\Post as MetadataPost;
-use ApiPlatform\Metadata\Put;
 
 #[ORM\Entity(repositoryClass: UserExtraDataRepository::class)]
-#[ApiResource(
-    operations: [
-        new Get(),
-        new MetadataPost(
-            controller: AboutController::class
-        ),
-    ],
- )]
  #[ApiResource(
-    operations: [
-        new Get(),
-        new MetadataPost(),
-        new Patch(),
-        new Put(),
-        new Delete()
-    ]
- )]
+             operations: [
+                
+                 new MetadataPost(
+                     controller: AuthorController::class
+                 ),
+             ],
+          )]
+ #[ApiResource(
+             operations: [
+                 new Get(),
+                 new MetadataPost(),
+                 new Patch(),
+                 new Put(),
+                 new Delete()
+             ]
+          )]
 class UserExtraData
 {
     #[ORM\Id]
@@ -46,6 +46,9 @@ class UserExtraData
 
     #[ORM\ManyToOne(inversedBy: 'userExtraData')]
     private ?About $about = null;
+
+    #[ORM\ManyToOne(inversedBy: 'userExtraData')]
+    private ?Author $postedBy = null;
 
     public function getId(): ?int
     {
@@ -87,4 +90,18 @@ class UserExtraData
 
         return $this;
     }
+
+    public function getPostedBy(): ?Author
+    {
+        return $this->postedBy;
+    }
+
+    public function setPostedBy(?Author $postedBy): static
+    {
+        $this->postedBy = $postedBy;
+
+        return $this;
+    }
+
+
 }
