@@ -14,7 +14,7 @@ use Doctrine\Common\Collections\ArrayCollection;
     normalizationContext:
     ['groups'=>['pays_read']]
 )]
-class PaysCultures implements EntityInterface
+class PaysCultures
 {
     #[ORM\Id]
     #[ORM\Column(type: "string", unique: true)]
