@@ -25,13 +25,14 @@ class PaysCultures implements EntityInterface
     #[ORM\OneToMany(mappedBy: 'paysCultures', targetEntity: Pays::class)]
     private Collection $pays;
 
-    #[ORM\OneToMany(mappedBy: 'relation', targetEntity: CustomField::class)]
+    #[ORM\OneToMany(mappedBy: 'coutriesCultures', targetEntity: CustomField::class)]
     private Collection $customFields;
 
     public function __construct()
     {
         $this->pays = new ArrayCollection();
         $this->customFields = new ArrayCollection();
+
     }
 
     public function getId(): ?string
@@ -80,7 +81,7 @@ class PaysCultures implements EntityInterface
     {
         if (!$this->customFields->contains($customField)) {
             $this->customFields->add($customField);
-            $customField->setCulture($this);
+            $customField->setCoutriesCultures($this);
         }
 
         return $this;
@@ -90,11 +91,13 @@ class PaysCultures implements EntityInterface
     {
         if ($this->customFields->removeElement($customField)) {
             // set the owning side to null (unless already changed)
-            if ($customField->getCulture() === $this) {
-                $customField->setCulture(null);
+            if ($customField->getCoutriesCultures() === $this) {
+                $customField->setCoutriesCultures(null);
             }
         }
 
         return $this;
     }
+
+
 }

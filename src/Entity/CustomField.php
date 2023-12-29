@@ -2,100 +2,123 @@
 
 namespace App\Entity;
 
-use ApiPlatform\Metadata\ApiResource;
 use App\Repository\CustomFieldRepository;
-use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: CustomFieldRepository::class)]
-#[ApiResource()]
 class CustomField
-
 {
     #[ORM\Id]
-    #[ORM\Column(type: "string", unique: true)]
-    #[ORM\GeneratedValue(strategy: 'CUSTOM')]
-    #[ORM\CustomIdGenerator(class: 'App\Doctrine\Base58UuidGenerator')]
-    public ?string $id = null;
-
-    #[ORM\Column(length: 255)]
-    private ?string $title = null;
-
-    #[ORM\Column(type: Types::TEXT)]
-    private ?string $content = null;
+    #[ORM\GeneratedValue]
+    #[ORM\Column]
+    private ?int $id = null;
 
     #[ORM\ManyToOne(inversedBy: 'customFields')]
-    private ?PaysCultures $culture = null;
+    private ?Pays $countries = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $entity = null;
+    #[ORM\ManyToOne(inversedBy: 'customFields')]
+    private ?PaysCultures $coutriesCultures = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $entityId = null;
+    #[ORM\ManyToOne(inversedBy: 'customFields')]
+    private ?PaysDemog $paysDemog = null;
 
-    public function getId(): ?string
+    #[ORM\ManyToOne(inversedBy: 'customFields')]
+    private ?PaysEconomy $CountriesEconomy = null;
+
+    #[ORM\ManyToOne(inversedBy: 'customFields')]
+    private ?PaysGeography $coutriesGeography = null;
+
+    #[ORM\ManyToOne(inversedBy: 'customFields')]
+    private ?PaysGouvernment $countriesGouvernment = null;
+
+    #[ORM\ManyToOne(inversedBy: 'customFields')]
+    private ?PaysHistory $countriesHistory = null;
+
+    public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getTitle(): ?string
+    public function getCountries(): ?Pays
     {
-        return $this->title;
+        return $this->countries;
     }
 
-    public function setTitle(string $title): static
+    public function setCountries(?Pays $countries): static
     {
-        $this->title = $title;
+        $this->countries = $countries;
 
         return $this;
     }
 
-    public function getContent(): ?string
+    public function getCoutriesCultures(): ?PaysCultures
     {
-        return $this->content;
+        return $this->coutriesCultures;
     }
 
-    public function setContent(string $content): static
+    public function setCoutriesCultures(?PaysCultures $coutriesCultures): static
     {
-        $this->content = $content;
+        $this->coutriesCultures = $coutriesCultures;
 
         return $this;
     }
 
-
-    public function getCulture()
+    public function getPaysDemog(): ?PaysDemog
     {
-        return $this->culture;
+        return $this->paysDemog;
     }
 
-
-    public function setCulture($culture)
+    public function setPaysDemog(?PaysDemog $paysDemog): static
     {
-        $this->culture = $culture;
+        $this->paysDemog = $paysDemog;
 
         return $this;
     }
 
-    public function getEntity(): ?string
+    public function getCountriesEconomy(): ?PaysEconomy
     {
-        return $this->entity;
+        return $this->CountriesEconomy;
     }
 
-    public function setEntity(string $entity): static
+    public function setCountriesEconomy(?PaysEconomy $CountriesEconomy): static
     {
-        $this->entity = $entity;
+        $this->CountriesEconomy = $CountriesEconomy;
 
         return $this;
     }
 
-    public function getEntityId(): ?string
+    public function getCoutriesGeography(): ?PaysGeography
     {
-        return $this->entityId;
+        return $this->coutriesGeography;
     }
 
-    public function setEntityId(string $entityId): static
+    public function setCoutriesGeography(?PaysGeography $coutriesGeography): static
     {
-        $this->entityId = $entityId;
+        $this->coutriesGeography = $coutriesGeography;
+
+        return $this;
+    }
+
+    public function getCountriesGouvernment(): ?PaysGouvernment
+    {
+        return $this->countriesGouvernment;
+    }
+
+    public function setCountriesGouvernment(?PaysGouvernment $countriesGouvernment): static
+    {
+        $this->countriesGouvernment = $countriesGouvernment;
+
+        return $this;
+    }
+
+    public function getCountriesHistory(): ?PaysHistory
+    {
+        return $this->countriesHistory;
+    }
+
+    public function setCountriesHistory(?PaysHistory $countriesHistory): static
+    {
+        $this->countriesHistory = $countriesHistory;
 
         return $this;
     }

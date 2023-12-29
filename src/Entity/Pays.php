@@ -24,6 +24,11 @@ use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: PaysRepository::class)]
 #[ApiResource(
+    normalizationContext:[
+        'groups' => ['pays_read']
+    ],
+)]
+#[ApiResource(
     operations: [
         new Get(),
         new GetCollection(),
@@ -47,71 +52,65 @@ class Pays
     #[ORM\Column(type: "string", unique: true)]
     #[ORM\GeneratedValue(strategy: 'CUSTOM')]
     #[ORM\CustomIdGenerator(class: 'App\Doctrine\Base58UuidGenerator')]
-    #[Groups(['aside_read', 'pays_read','country_list','company_read', 'invest_read', 'posts_read'])]
-    private ?string $id = null;
+    public ?string $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['aside_read', 'pays_read','country_list','company_read', 'invest_read', 'posts_read','cities_read'])]
+    #[Groups(['pays_read','country_list','company_read', 'invest_read', 'posts_read','cities_read'])]
     private ?string $name = null;
 
     #[ORM\OneToOne(inversedBy: 'pays', cascade: ['persist', 'remove'])]
-    #[Groups(['aside_read', 'pays_read','cities_read'])]
+    #[Groups(['pays_read','cities_read'])]
     private ?Seal $seal = null;
 
     #[ORM\OneToOne(inversedBy: 'pays', cascade: ['persist', 'remove'])]
-    #[Groups(['aside_read', 'pays_read'])]
+    #[Groups(['pays_read'])]
     private ?Location $location = null;
 
     #[ORM\OneToOne(inversedBy: 'pays', cascade: ['persist', 'remove'])]
-    #[Groups(['aside_read', 'pays_read'])]
-    private ?Aside $aside = null;
-
-    #[ORM\OneToOne(inversedBy: 'pays', cascade: ['persist', 'remove'])]
-    #[Groups(['aside_read', 'pays_read','country_list','company_read', 'invest_read', 'posts_read'])]
+    #[Groups(['pays_read','country_list','company_read', 'invest_read', 'posts_read'])]
     private ?Flag $flag = null;
 
     #[ORM\ManyToOne(inversedBy: 'pays', cascade: ['persist', 'remove'])]
-    #[Groups(['aside_read', 'pays_read'])]
+    #[Groups(['pays_read'])]
     private ?PaysHistory $paysHistory = null;
 
     #[ORM\ManyToOne(inversedBy: 'pays', cascade: ['persist', 'remove'])]
-    #[Groups(['aside_read', 'pays_read'])]
+    #[Groups(['pays_read'])]
     private ?PaysGeography $paysGeography = null;
 
     #[ORM\ManyToOne(inversedBy: 'pays', cascade: ['persist', 'remove'])]
-    #[Groups(['aside_read', 'pays_read'])]
+    #[Groups(['pays_read'])]
     private ?PaysGouvernment $paysGouvernment = null;
 
     #[ORM\ManyToOne(inversedBy: 'pays', cascade: ['persist', 'remove'])]
-    #[Groups(['aside_read', 'pays_read'])]
+    #[Groups(['pays_read'])]
     private ?PaysEconomy $paysEconomy = null;
 
     #[ORM\ManyToOne(inversedBy: 'pays', cascade: ['persist', 'remove'])]
-    #[Groups(['aside_read', 'pays_read'])]
+    #[Groups(['pays_read'])]
     private ?PaysCultures $paysCultures = null;
 
     #[ORM\ManyToOne(inversedBy: 'pays', cascade: ['persist', 'remove'])]
-    #[Groups(['aside_read', 'pays_read'])]
+    #[Groups(['pays_read'])]
     private ?PaysDemog $paysDemog = null;
 
     #[ORM\ManyToMany(targetEntity: Religion::class, mappedBy: 'pays', cascade: ['persist', 'remove'])]
-    #[Groups(['aside_read', 'pays_read'])]
+    #[Groups(['pays_read'])]
     private Collection $religions;
 
     #[ORM\ManyToMany(targetEntity: Language::class, mappedBy: 'pays', cascade: ['persist', 'remove'])]
-    #[Groups(['aside_read', 'pays_read'])]
+    #[Groups(['pays_read'])]
     private Collection $languages;
 
     #[ORM\OneToMany(mappedBy: 'country', targetEntity: Company::class, orphanRemoval: true)]
     private Collection $companies;
 
     #[ORM\OneToMany(mappedBy: 'country', targetEntity: City::class, orphanRemoval: true)]
-    #[Groups(['aside_read', 'pays_read'])]
+    #[Groups(['pays_read'])]
     private Collection $cities;
 
-    #[ORM\OneToMany(mappedBy: 'country', targetEntity: ExtraData::class)]
-    private Collection $extraData;
-
+    #[ORM\OneToMany(mappedBy: 'countries', targetEntity: CustomField::class)]
+    private Collection $customFields;
 
 
     public function __construct()
@@ -119,8 +118,202 @@ class Pays
         $this->religions = new ArrayCollection();
         $this->languages = new ArrayCollection();
         $this->companies = new ArrayCollection();
-        $this->extraData = new ArrayCollection();
+        $this->customFields = new ArrayCollection();
     } 
+
+    #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(['pays_read'])]
+    private ?string $motto = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(['pays_read'])]
+    private ?string $anthem = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(['pays_read'])]
+    private ?string $population = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(['pays_read'])]
+    private ?string $area = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(['pays_read'])]
+    private ?string $populationDensity = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(['pays_read'])]
+    private ?string $gdp = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(['pays_read'])]
+    private ?string $gdpNominal = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(['pays_read'])]
+    private ?string $hdi = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(['aside_read' , 'pays_read'])]
+    private ?string $currency = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(['pays_read'])]
+    private ?string $drivingSide = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(['pays_read'])]
+    private ?string $callingCode = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(['pays_read'])]
+    private ?string $internetTld = null;
+
+
+    public function getMotto(): ?string
+    {
+        return $this->motto;
+    }
+
+    public function setMotto(?string $motto): static
+    {
+        $this->motto = $motto;
+
+        return $this;
+    }
+
+    public function getAnthem(): ?string
+    {
+        return $this->anthem;
+    }
+
+    public function setAnthem(?string $anthem): static
+    {
+        $this->anthem = $anthem;
+
+        return $this;
+    }
+
+    public function getPopulation(): ?string
+    {
+        return $this->population;
+    }
+
+    public function setPopulation(?string $population): static
+    {
+        $this->population = $population;
+
+        return $this;
+    }
+
+    public function getArea(): ?string
+    {
+        return $this->area;
+    }
+
+    public function setArea(?string $area): static
+    {
+        $this->area = $area;
+
+        return $this;
+    }
+
+    public function getPopulationDensity(): ?string
+    {
+        return $this->populationDensity;
+    }
+
+    public function setPopulationDensity(?string $populationDensity): static
+    {
+        $this->populationDensity = $populationDensity;
+
+        return $this;
+    }
+
+    public function getGdp(): ?string
+    {
+        return $this->gdp;
+    }
+
+    public function setGdp(?string $gdp): static
+    {
+        $this->gdp = $gdp;
+
+        return $this;
+    }
+
+    public function getGdpNominal(): ?string
+    {
+        return $this->gdpNominal;
+    }
+
+    public function setGdpNominal(?string $gdpNominal): static
+    {
+        $this->gdpNominal = $gdpNominal;
+
+        return $this;
+    }
+
+    public function getHdi(): ?string
+    {
+        return $this->hdi;
+    }
+
+    public function setHdi(?string $hdi): static
+    {
+        $this->hdi = $hdi;
+
+        return $this;
+    }
+
+    public function getCurrency(): ?string
+    {
+        return $this->currency;
+    }
+
+    public function setCurrency(?string $currency): static
+    {
+        $this->currency = $currency;
+
+        return $this;
+    }
+
+    public function getDrivingSide(): ?string
+    {
+        return $this->drivingSide;
+    }
+
+    public function setDrivingSide(?string $drivingSide): static
+    {
+        $this->drivingSide = $drivingSide;
+
+        return $this;
+    }
+
+    public function getCallingCode(): ?string
+    {
+        return $this->callingCode;
+    }
+
+    public function setCallingCode(?string $callingCode): static
+    {
+        $this->callingCode = $callingCode;
+
+        return $this;
+    }
+
+    public function getInternetTld(): ?string
+    {
+        return $this->internetTld;
+    }
+
+    public function setInternetTld(?string $internetTld): static
+    {
+        $this->internetTld = $internetTld;
+
+        return $this;
+    }
+
 
     public function getId(): ?string
     {
@@ -159,18 +352,6 @@ class Pays
     public function setLocation(?Location $location): static
     {
         $this->location = $location;
-
-        return $this;
-    }
-
-    public function getAside(): ?Aside
-    {
-        return $this->aside;
-    }
-
-    public function setAside(?Aside $aside): static
-    {
-        $this->aside = $aside;
 
         return $this;
     }
@@ -374,35 +555,34 @@ class Pays
     }
 
     /**
-     * @return Collection<int, ExtraData>
+     * @return Collection<int, CustomField>
      */
-    public function getExtraData(): Collection
+    public function getCustomFields(): Collection
     {
-        return $this->extraData;
+        return $this->customFields;
     }
 
-    public function addExtraData(ExtraData $extraData): static
+    public function addCustomField(CustomField $customField): static
     {
-        if (!$this->extraData->contains($extraData)) {
-            $this->extraData->add($extraData);
-            $extraData->setCountry($this);
+        if (!$this->customFields->contains($customField)) {
+            $this->customFields->add($customField);
+            $customField->setCountries($this);
         }
 
         return $this;
     }
 
-    public function removeExtraData(ExtraData $extraData): static
+    public function removeCustomField(CustomField $customField): static
     {
-        if ($this->extraData->removeElement($extraData)) {
+        if ($this->customFields->removeElement($customField)) {
             // set the owning side to null (unless already changed)
-            if ($extraData->getCountry() === $this) {
-                $extraData->setCountry(null);
+            if ($customField->getCountries() === $this) {
+                $customField->setCountries(null);
             }
         }
 
         return $this;
     }
-
 
 }
 

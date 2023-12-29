@@ -23,16 +23,16 @@ class PaysHistory
     #[ORM\CustomIdGenerator(class: 'App\Doctrine\Base58UuidGenerator')]
     private ?string $id = null;
 
-    #[Column(type: 'json')]
-    #[Groups(['pays_read'])]
-    private array $extraData = [];
-
     #[ORM\OneToMany(mappedBy: 'paysHistory', targetEntity: Pays::class)]
     private Collection $pays;
+
+    #[ORM\OneToMany(mappedBy: 'countriesHistory', targetEntity: CustomField::class)]
+    private Collection $customFields;
 
     public function __construct()
     {
         $this->pays = new ArrayCollection();
+        $this->customFields = new ArrayCollection();
     }
 
     public function getId(): ?string
@@ -70,16 +70,32 @@ class PaysHistory
         return $this;
     }
 
-
-    public function getExtraData(): array
+    /**
+     * @return Collection<int, CustomField>
+     */
+    public function getCustomFields(): Collection
     {
-        return $this->extraData;
+        return $this->customFields;
     }
 
-
-    public function setExtraData($extraData): self
+    public function addCustomField(CustomField $customField): static
     {
-        $this->extraData = $extraData;
+        if (!$this->customFields->contains($customField)) {
+            $this->customFields->add($customField);
+            $customField->setCountriesHistory($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCustomField(CustomField $customField): static
+    {
+        if ($this->customFields->removeElement($customField)) {
+            // set the owning side to null (unless already changed)
+            if ($customField->getCountriesHistory() === $this) {
+                $customField->setCountriesHistory(null);
+            }
+        }
 
         return $this;
     }

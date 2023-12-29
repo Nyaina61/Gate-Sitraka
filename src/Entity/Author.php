@@ -18,6 +18,7 @@ use App\Controller\AcceptContactController;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping\InverseJoinColumn;
 use ApiPlatform\Metadata\Post as PostMetadata;
+use App\Controller\AuthorController;
 use App\Controller\GetAuthorContactsController;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -39,6 +40,9 @@ use Symfony\Component\Serializer\Annotation\Groups;
         controller: GetAuthorContactsController::class,
         deserialize: false
     ),
+    // new PostMetadata(
+    //     controller: AuthorController::class
+    // ),
    ]
  )]
 abstract class Author
@@ -84,9 +88,6 @@ abstract class Author
     #[ORM\OneToMany(mappedBy: 'author', targetEntity: Recommended::class)]
     private Collection $recommendeds;
 
-    #[ORM\OneToMany(mappedBy: 'postedBy', targetEntity: UserExtraData::class)]
-    private Collection $userExtraData;
-
     public function __construct()
     {
         $this->posts = new ArrayCollection();
@@ -100,7 +101,7 @@ abstract class Author
         $this->jobOffers = new ArrayCollection();
         $this->evaluations = new ArrayCollection();
         $this->recommendeds = new ArrayCollection();
-        $this->userExtraData = new ArrayCollection();
+       
     }
 
     public function getId(): ?string
@@ -456,35 +457,7 @@ abstract class Author
         return $this;
     }
 
-    /**
-     * @return Collection<int, UserExtraData>
-     */
-    public function getUserExtraData(): Collection
-    {
-        return $this->userExtraData;
-    }
-
-    public function addUserExtraData(UserExtraData $userExtraData): static
-    {
-        if (!$this->userExtraData->contains($userExtraData)) {
-            $this->userExtraData->add($userExtraData);
-            $userExtraData->setPostedBy($this);
-        }
-
-        return $this;
-    }
-
-    public function removeUserExtraData(UserExtraData $userExtraData): static
-    {
-        if ($this->userExtraData->removeElement($userExtraData)) {
-            // set the owning side to null (unless already changed)
-            if ($userExtraData->getPostedBy() === $this) {
-                $userExtraData->setPostedBy(null);
-            }
-        }
-
-        return $this;
-    }
+    
 
 
 }

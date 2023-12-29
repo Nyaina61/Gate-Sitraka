@@ -19,6 +19,9 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
 #[ORM\Entity(repositoryClass: CompanyLogoRepository::class)]
 #[HasLifecycleCallbacks]
 #[ApiResource(
+    normalizationContext: [
+        'groups' => ['companyLogo_read']
+    ],
     operations: [
         new Get(),
         new Put(),

@@ -89,18 +89,12 @@ class Comment
     #[ORM\OneToMany(mappedBy: 'parent', targetEntity: self::class)]
     private Collection $replies;
 
-    
-
-    
-
-    
-
     public function __construct()
     {
         $this->createdAt = new \DateTimeImmutable();
         $this->updatedAt = new \DateTimeImmutable();
         $this->replies = new ArrayCollection();
-        $this->commentReplies = new ArrayCollection();
+        $this->replies = new ArrayCollection();
     }
 
     #[ORM\PreUpdate]
